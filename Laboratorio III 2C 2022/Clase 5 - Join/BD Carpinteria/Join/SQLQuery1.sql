@@ -1,4 +1,6 @@
-﻿--1Por cada producto listar la descripción del producto, el precio y el nombre de la categoría
+﻿USE Carpinteria
+SELECT * FROM Productos
+--1Por cada producto listar la descripción del producto, el precio y el nombre de la categoría
 --a la que pertenece.
 SELECT 
 	P.ID,
@@ -9,9 +11,9 @@ FROM Productos P
 LEFT JOIN Categorias C ON C.ID=P.IDCategoria
 
 --2Listar las categorías de producto de las cuales no se registren productos.
-
 SELECT 
 	C.ID,
+	C.Nombre,
 	P.Descripcion
 FROM Categorias C
 LEFT JOIN Productos P ON C.ID = P.IDCategoria
@@ -52,7 +54,7 @@ SELECT DISTINCT
 	C.Celular,
 	P.COSTO
 FROM Clientes C 
-LEFT JOIN Pedidos P ON P.IDCliente = C.ID
+INNER JOIN Pedidos P ON P.IDCliente = C.ID
 WHERE P.Costo>1000000
 
 --6Listar IDPedido, Costo, Fecha de solicitud y fecha de finalización,
@@ -112,14 +114,38 @@ LEFT JOIN Productos PR ON PR.ID = PE.IDProducto
 	INNER JOIN Productos PR ON PE.IDProducto= PR.ID
 	INNER JOIN Categorias CAT ON PR.IDCategoria = CAT.ID
 
-	SELECT * FROM Clientes
-	SELECT * FROM Categorias
 
---9Listar apellidos y nombres de aquellos clientes que hayan realizado algún pedido cuya cantidad sea
---exactamente igual a la cantidad considerada mayorista del producto.
+
+
+--9Listar apellidos y nombres de aquellos clientes que hayan realizado algún pedido cuya 
+--cantidad sea exactamente igual a la cantidad considerada mayorista del producto.
+
+SELECT 
+	c.Apellidos, 
+	C.Nombres, 
+	P.Cantidad AS CantMayorista
+FROM Clientes C
+INNER JOIN Pedidos P ON C.ID = P.IDCliente
+INNER JOIN Productos PR ON P.IDProducto = PR.ID
+WHERE PR.CantidadMayorista = P.Cantidad
+
+
+
 
 
 --10Listar por cada producto el nombre del producto, el nombre de la categoría, el precio de venta
 --minorista, el precio de venta mayorista y el porcentaje de ahorro que se obtiene por la compra 
 --mayorista a valor mayorista en relación al valor minorista.
+
+SELECT 
+	P.Descripcion,
+	C.Nombre, 
+	P.Precio,
+	P.PrecioVentaMayorista
+	--CONVERT (decimal, (PRECIO - PRECIOVENTAMAYORISTA)/PRECIO * 100)*(0.1)
+FROM Productos P
+INNER JOIN Categorias C ON C.ID=P.IDCategoria
+
+SELECT * FROM Productos
+
 
